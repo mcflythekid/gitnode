@@ -1,3 +1,4 @@
+var crypto = require('crypto');
 const { spawn } = require('child_process');
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -13,6 +14,10 @@ app.post("/test", (req, res)=> {
     if (!/^[a-z0-9-]+$/i.test(req.body.repository.name)){
         res.end("Require valid repository name");
         return;
+    }
+    if (!req.headers['x-hub-signature'] || !github(req.headers['x-hub-signature'], JSON.stringify(req.body), 'ooop')){
+        res.end('Not github');
+	return;
     }
 
     var script = req.body.repository.name + '.sh';
@@ -30,3 +35,8 @@ app.post("/test", (req, res)=> {
 });
 
 app.listen(9000);
+
+var github = function(signature, payload, secret) {
+  const computedSignature = `sha1=${crypto.createHmac("sha1", secret).update(payload).digest("hex")}`;
+  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(computedSignature));
+}
