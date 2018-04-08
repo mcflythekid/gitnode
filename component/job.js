@@ -47,8 +47,11 @@ var job =(function(e){
         
         // New process
         var scriptFile = config.DIR_SCRIPT + '/' + repoName + '.sh';
-        if (!fs.existsSync(scriptFile)) scriptFile = '';
-        scriptFile = path.resolve(scriptFile);
+        if (!fs.existsSync(scriptFile)) {
+            scriptFile = '';
+        } else {
+            scriptFile = path.resolve(scriptFile);
+        }
         var proc = spawn('bash', 
             [
                 config.SCRIPT_DEFAULT, 
