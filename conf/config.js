@@ -6,6 +6,7 @@ config.MAPPING = '/build';
 config.DIR_LOG = 'log';
 config.DIR_BUILD = 'build';
 config.DIR_JOB = '.job';
+config.DIR_SCRIPT = 'script';
 
 config.SCRIPT_DEFAULT = 'component/default.sh';
 

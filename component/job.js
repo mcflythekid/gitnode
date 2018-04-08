@@ -4,6 +4,7 @@ var config = require('../conf/config');
 var repositories = require('../conf/repo');
 var moment = require('moment');
 var spawn = require('child_process').spawn;
+var path = require("path");
 
 var job =(function(e){
     var getAJobFileName = function(job_dir){
@@ -45,11 +46,15 @@ var job =(function(e){
         logStream.write("\ngitnode-build [" + moment().format("YYYY-MM-DD HH:mm:ss") + "]\n");
         
         // New process
+        var scriptFile = config.DIR_SCRIPT + '/' + repoName + '.sh';
+        if (!fs.existsSync(scriptFile)) scriptFile = '';
+        scriptFile = path.resolve(scriptFile);
         var proc = spawn('bash', 
             [
                 config.SCRIPT_DEFAULT, 
                 'https://github.com/' + repository.github_id, 
-                repository.location ? repository.location : config.DIR_BUILD + '/' + repository.name
+                repository.location ? repository.location : config.DIR_BUILD + '/' + repository.name,
+                scriptFile
             ]
         );
         proc.stdout.pipe(logStream);
