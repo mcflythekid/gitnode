@@ -6,7 +6,6 @@ var crypto = require('crypto');
 
 var githubsign = function(signature, payload, secret) {
     const computedSignature = `sha1=${crypto.createHmac("sha1", secret).update(payload).digest("hex")}`;
-    return true;
     return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(computedSignature));
 };
 
